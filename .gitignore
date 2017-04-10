@@ -1,0 +1,16 @@
+# Trash
+*.AppleDouble
+.DS_Store
+# All .ini files except template.ini
+*.ini
+!template.ini
+# pycache folders
+__pycache__/
+*.pyc
+SOURCES.txt
+*.csv
+.idea/
+*.egg-info
+dist/
+build/
+data/
