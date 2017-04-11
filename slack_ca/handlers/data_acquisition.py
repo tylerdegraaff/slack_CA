@@ -16,14 +16,8 @@ class IDataAcquisition(object, metaclass=ABCMeta):
         return []
 
 class BaseDataAcquisition(IDataAcquisition, metaclass=ABCMeta):
-    def fetch(self):
+    def __init__(self):
         pass
 
-    @abstractmethod
-    def create_request_for_page(self, page):
-        """
-        Create a HttpRequest for fetching a page
-        :param page: the page to fetch
-        :return: the request
-        """
-        return requests.Response()
+    def fetch(self):
+        pass

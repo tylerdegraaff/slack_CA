@@ -2,6 +2,7 @@ import os
 import time
 from slackclient import SlackClient
 from settings import settings
+from slack_ca.factories.external_factory import get_aqcuistion
 
 
 # starterbot's ID as an environment variable
@@ -9,10 +10,9 @@ BOT_ID = settings['BOT_ID']
 
 # constants
 AT_BOT = "<@" + BOT_ID + ">"
-AGENDA_COMMAND = "agenda"
 
 # instantiate Slack & Twilio clients
-slack_client = settings['SLACK_BOT_TOKEN']
+slack_client = SlackClient(settings['SLACK_BOT_TOKEN'])
 
 
 def handle_command(command, channel):
@@ -21,11 +21,7 @@ def handle_command(command, channel):
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
     """
-    response = "Not sure what you mean. Use the *" + AGENDA_COMMAND + \
-               "* command with numbers, delimited by spaces."
-    if command.startswith(AGENDA_COMMAND):
-        response = "Als de PO Tyler dit implementeerd zou hebben had je" + \
-                    "nu je agenda gegevens terug moeten krijgen."
+    response = get_aqcuistion(command)
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 

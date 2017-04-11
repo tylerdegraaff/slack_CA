@@ -3,7 +3,6 @@ from slackclient import SlackClient
 from settings import settings
 
 # Insert BOT_NAME here to find it
-print(settings)
 BOT_NAME = settings['BOT_NAME']
 
 # Use in terminal: export SLACK_BOT_TOKEN='{token}' to set this variable
