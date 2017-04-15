@@ -1,1 +1,4 @@
 slackclient==1.0.0
+httplib2
+apiclient
+oauth2client

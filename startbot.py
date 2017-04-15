@@ -1,5 +1,6 @@
 import os
 import time
+
 from slackclient import SlackClient
 from settings import settings
 from slack_ca.factories.external_factory import get_aqcuistion
