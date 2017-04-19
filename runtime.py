@@ -50,13 +50,13 @@ def main():
             now_time.split(":")))
         now_hours = now_minutes / 3600
 
-        if (avg_time_agenda - now_hours) <= 0.3:
+        if -0.3 <= (avg_time_agenda - now_hours) <= 0.3:
             slack_client.api_call("chat.postMessage", channel=CHANNEL,
                                   text=AGENDA_TEXT, as_user=True)
             response = get_aqcuistion("agenda")
             slack_client.api_call("chat.postMessage", channel=CHANNEL,
                                   text=response, as_user=True)
-        if (avg_time_start - now_hours) <= 0.3:
+        if -0.3 <= (avg_time_start - now_hours) <= 0.3:
             slack_client.api_call("chat.postMessage", channel=CHANNEL,
                                   text=GOODMORNING_TEXT, as_user=True)
 
