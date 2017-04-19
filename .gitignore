@@ -15,3 +15,4 @@ dist/
 build/
 data/
 settings.py
+client_secret.json

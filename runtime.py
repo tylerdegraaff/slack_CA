@@ -17,37 +17,48 @@ BOT_ID = settings['BOT_ID']
 AT_BOT = "<@" + BOT_ID + ">"
 CHANNEL = settings['CHANNEL']
 AGENDA_TEXT = settings['PREDICT_AGENDA_TEXT']
+GOODMORNING_TEXT = settings['GOODMORNING_TEXT']
+MOCK_DATA = '/Users/Tylerjeremy/Desktop/slack_ca/www/slack_ca/mock-data.json'
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(settings['SLACK_BOT_TOKEN'])
 
 def main():
-    with open('mock-data.json') as data_file:
+    with open(MOCK_DATA) as data_file:
         data = json.load(data_file)
-        total_time = 0
 
         for marjorkey, subdict in data.items():
-            print(marjorkey)
             total_entries = len(subdict)
-            for time in subdict:
-                parsed_time = time['time']
-                total_time += sum(x * int(t) for x, t in zip([3600, 60, 1],
-                    parsed_time.split(":")))
+            if marjorkey == 'agenda':
+                total_time = 0
+                for time in subdict:
+                    parsed_time = time['time']
+                    total_time += sum(x * int(t) for x, t in zip([3600, 60, 1],
+                        parsed_time.split(":")))
+                    avg_time_agenda = (total_time / 3600) / total_entries
+            if marjorkey == 'start':
+                total_time = 0
+                for time in subdict:
+                    parsed_time = time['time']
+                    total_time += sum(x * int(t) for x, t in zip([3600, 60, 1],
+                        parsed_time.split(":")))
+                    avg_time_start = (total_time / 3600) / total_entries
 
-        avg_time = (total_time / 3600) / total_entries
         now_minutes = 0
         now_time = strftime("%H:%M:%S", localtime())
         now_minutes += sum(x * int(t) for x, t in zip([3600, 60, 1],
             now_time.split(":")))
         now_hours = now_minutes / 3600
 
-        if (avg_time - now_hours) <= 0.3:
+        if (avg_time_agenda - now_hours) <= 0.3:
             slack_client.api_call("chat.postMessage", channel=CHANNEL,
                                   text=AGENDA_TEXT, as_user=True)
             response = get_aqcuistion("agenda")
             slack_client.api_call("chat.postMessage", channel=CHANNEL,
                                   text=response, as_user=True)
-            return
+        if (avg_time_start - now_hours) <= 0.3:
+            slack_client.api_call("chat.postMessage", channel=CHANNEL,
+                                  text=GOODMORNING_TEXT, as_user=True)
 
         return
 
