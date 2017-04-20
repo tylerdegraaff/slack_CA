@@ -24,11 +24,15 @@ MOCK_DATA = '/Users/Tylerjeremy/Desktop/slack_ca/www/slack_ca/mock-data.json'
 slack_client = SlackClient(settings['SLACK_BOT_TOKEN'])
 
 def main():
+    # Open the mock_data we have
     with open(MOCK_DATA) as data_file:
+        # Load the mock-data as json
         data = json.load(data_file)
-
+        # Loop over the data
         for marjorkey, subdict in data.items():
             total_entries = len(subdict)
+            # Check if the majorkey is recognized so we calculate the
+            # the average time for the majorkey.
             if marjorkey == 'agenda':
                 total_time = 0
                 for time in subdict:
@@ -44,19 +48,22 @@ def main():
                         parsed_time.split(":")))
                     avg_time_start = (total_time / 3600) / total_entries
 
+        # Get the time for now in hours
         now_minutes = 0
-        now_time = strftime("%H:%M:%S", localtime())
         now_minutes += sum(x * int(t) for x, t in zip([3600, 60, 1],
             now_time.split(":")))
         now_hours = now_minutes / 3600
+        # Uncomment this to show hours minutes and seconds format.
+        # now_time = strftime("%H:%M:%S", localtime())
 
-        if -0.3 <= (avg_time_agenda - now_hours) <= 0.3:
+        # Check if the difference is low enough to send a message to the user.
+        if -0.1 <= (avg_time_agenda - now_hours) <= 0.1:
             slack_client.api_call("chat.postMessage", channel=CHANNEL,
                                   text=AGENDA_TEXT, as_user=True)
             response = get_aqcuistion("agenda")
             slack_client.api_call("chat.postMessage", channel=CHANNEL,
                                   text=response, as_user=True)
-        if -0.3 <= (avg_time_start - now_hours) <= 0.3:
+        if -0.1 <= (avg_time_start - now_hours) <= 0.1:
             slack_client.api_call("chat.postMessage", channel=CHANNEL,
                                   text=GOODMORNING_TEXT, as_user=True)
 
