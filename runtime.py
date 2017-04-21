@@ -50,11 +50,11 @@ def main():
 
         # Get the time for now in hours
         now_minutes = 0
+        now_time = strftime("%H:%M:%S", localtime())
         now_minutes += sum(x * int(t) for x, t in zip([3600, 60, 1],
             now_time.split(":")))
         now_hours = now_minutes / 3600
-        # Uncomment this to show hours minutes and seconds format.
-        # now_time = strftime("%H:%M:%S", localtime())
+
 
         # Check if the difference is low enough to send a message to the user.
         if -0.1 <= (avg_time_agenda - now_hours) <= 0.1:
